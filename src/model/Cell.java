@@ -1,12 +1,12 @@
 package model;
 
 public class Cell {
-    public int row;
-    public int col;
+    public int x;
+    public int y;
 
     public Cell(int row, int col) {
-        this.row = row;
-        this.col = col;
+        this.x = row;
+        this.y = col;
     }
 
     @Override
@@ -14,14 +14,11 @@ public class Cell {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Cell cell = (Cell) o;
-        return row == cell.row && col == cell.col;
+        return x == cell.x && y == cell.y;
     }
 
     @Override
     public String toString() {
-        return "Cell{" +
-                "row=" + row +
-                ", col=" + col +
-                '}';
+        return "(" + x + ", " + y + ")";
     }
 }

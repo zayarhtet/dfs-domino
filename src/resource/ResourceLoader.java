@@ -32,17 +32,4 @@ public class ResourceLoader {
         }
         return resourcePaths;
     }
-
-    public static void main(String[] args) {
-        // Example of loading a resource
-        String resourceName = "resource/levels/01.txt";
-        InputStream inputStream = loadResource(resourceName);
-
-        if (inputStream != null) {
-            // Process the InputStream
-            System.out.println("Loaded resource: " + resourceName);
-        } else {
-            System.out.println("Resource not found: " + resourceName);
-        }
-    }
 }

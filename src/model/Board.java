@@ -1,12 +1,10 @@
 package model;
 
-import java.util.stream.IntStream;
-
-public class Board implements Cloneable {
+public class Board {
 
     protected final int totalRow, totalCol;
 
-    protected int [][] board;
+    public int [][] board;
 
     public Board(int row, int col) {
         totalRow = row;
@@ -26,8 +24,8 @@ public class Board implements Cloneable {
         return totalCol;
     }
 
-    public void addCell(Cell target, int value) {
-        board[target.row][target.col] = value;
+    public void setCell(Cell target, int value) {
+        board[target.x][target.y] = value;
     }
 
     @Override
@@ -46,15 +44,5 @@ public class Board implements Cloneable {
         }
         sb.append("]");
         return sb.toString();
-    }
-
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        Board cloned = (Board) super.clone();
-        cloned.board = new int[this.totalRow][this.totalCol];
-
-        IntStream.range(0, this.totalRow).forEach(i -> System.arraycopy(this.board[i], 0, cloned.board[i], 0, this.totalCol));
-
-        return cloned;
     }
 }

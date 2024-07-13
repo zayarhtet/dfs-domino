@@ -59,7 +59,7 @@ public class FileInputParser implements InputParser {
         String [] rawPieces = pieceString.split(" ");
         List<Piece> pieces = new ArrayList<>();
 
-        IntStream.range(0, rawPieces.length).parallel().forEach(x -> {
+        IntStream.range(0, rawPieces.length).forEach(x -> {
             String [] rows = rawPieces[x].split(",");
             Piece p = new Piece(rows.length, rows[0].length());
             parseBoard(rows, p);
@@ -73,7 +73,7 @@ public class FileInputParser implements InputParser {
             String [] cells = rows[i].split("");
             IntStream.range(0, cells.length).parallel().forEach(j -> {
                 try {
-                    b.addCell(new Cell(i,j), parseInt(cells[j]));
+                    b.setCell(new Cell(i,j), parseInt(cells[j]));
                 } catch (NumberFormatException e) {
                     System.out.println("board cell cannot be parsed.");
                 }
