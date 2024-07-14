@@ -6,6 +6,7 @@ import model.MainBoard;
 import model.Piece;
 import resource.ResourceLoader;
 
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +18,9 @@ public class FileInputParser implements InputParser {
     private String boardString;
     private String pieceString;
 
-    public FileInputParser(String filename) {
+    public FileInputParser(String filename) throws FileNotFoundException {
         InputStream is = ResourceLoader.loadResource(filename);
+        if (is == null) { throw new FileNotFoundException(filename + " is not found."); }
 
         try (Scanner sc = new Scanner(is)) {
             String line = readNextLine(sc);

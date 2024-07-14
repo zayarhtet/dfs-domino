@@ -7,6 +7,7 @@ import parser.FileInputParser;
 import parser.InputParser;
 import resource.ResourceLoader;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.*;
@@ -42,12 +43,12 @@ public class Solver {
         return levelIterator.hasNext();
     }
 
-    public void solve() throws InterruptedException {
+    public void solve() throws InterruptedException, FileNotFoundException {
         String path = levelIterator.next();
         solveOne(path);
     }
 
-    public static void solveOne(String path) throws InterruptedException {
+    public static void solveOne(String path) throws InterruptedException, FileNotFoundException {
         System.out.println(path);
 
         InputParser ip = new FileInputParser(path);

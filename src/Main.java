@@ -1,5 +1,6 @@
 import solver.Solver;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.concurrent.*;
@@ -22,6 +23,8 @@ public class Main {
                     try { s.solve(); }
                     catch (InterruptedException e) {
                         System.out.println("Execution was interrupted.\n");
+                    } catch (FileNotFoundException e) {
+                        System.out.println(e.getMessage());
                     }
                 });
 
@@ -40,11 +43,12 @@ public class Main {
     }
 
     public static void executeOne(String classpathFile) {
-
         Future<?> future = executor.submit(() -> {
             try { Solver.solveOne(classpathFile); }
             catch (InterruptedException e) {
                 System.out.println("Execution was interrupted.\n");
+            } catch (FileNotFoundException e) {
+                System.out.println(e.getMessage());
             }
         });
 
