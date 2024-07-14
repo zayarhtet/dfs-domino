@@ -17,19 +17,30 @@ import java.util.List;
 public class Solver {
     private List<String> resourcePaths;
     private Iterator<String> levelIterator;
+
     public Solver(String folderName) throws IOException, URISyntaxException {
         resourcePaths = ResourceLoader.getResourcePaths(folderName);
         levelIterator = resourcePaths.iterator();
     }
 
-    public void solve() {
+    public boolean hasNextLevel() {
+        return levelIterator.hasNext();
+    }
+
+    public void solve() throws InterruptedException {
         String path = levelIterator.next();
+        solveOne(path);
+    }
+
+    public static void solveOne(String path) throws InterruptedException {
+        System.out.println(path);
 
         InputParser ip = new FileInputParser(path);
-        MainBoard mb = ip.getBoard();
-        List<Piece> pieces = ip.getPieces();
 
+        MainBoard mb = ip.getBoard();
         System.out.println(mb);
+
+        List<Piece> pieces = ip.getPieces();
         pieces.stream().forEach(x -> x.parseTopLeftCorners(mb));
 
         List<Cell> result = new ArrayList<>();
@@ -39,10 +50,10 @@ public class Solver {
         System.out.println(System.lineSeparator());
     }
 
-    public boolean walkThroughBoard(MainBoard mb, List<Piece> pieces, int currentPieceIndex, List<Cell> result) {
-        if (currentPieceIndex == pieces.size()) {
-            return mb.isSolved();
-        }
+    public static boolean walkThroughBoard(MainBoard mb, List<Piece> pieces, int currentPieceIndex, List<Cell> result) throws InterruptedException {
+        if (Thread.currentThread().isInterrupted()) throw new InterruptedException();
+
+        if (currentPieceIndex == pieces.size()) return mb.isSolved();
 
         Piece p = pieces.get(currentPieceIndex);
         List<Cell> fittingCells = p.getFittingCells();
@@ -53,14 +64,11 @@ public class Solver {
             if (walkThroughBoard(mb, pieces, currentPieceIndex+1, result)) {
                 return true;
             }
+
             mb.removePiece(p, c);
             result.remove(result.size()-1);
         }
 
         return false;
-    }
-
-    public boolean hasNextLevel() {
-        return levelIterator.hasNext();
     }
 }
