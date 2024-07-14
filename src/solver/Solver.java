@@ -9,10 +9,25 @@ import resource.ResourceLoader;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
+class Result {
+    Cell c;
+    int id;
+
+    public Result(Cell c, int id) {
+        this.c = c;
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String toString() {
+        return c.toString();
+    }
+}
 
 public class Solver {
     private List<String> resourcePaths;
@@ -41,32 +56,42 @@ public class Solver {
         System.out.println(mb);
 
         List<Piece> pieces = ip.getPieces();
-        pieces.stream().forEach(x -> x.parseTopLeftCorners(mb));
 
-        List<Cell> result = new ArrayList<>();
-        walkThroughBoard(mb, pieces, 0, result);
-        System.out.println(result);
+        pieces.stream().forEach(x -> x.parseTopLeftCorners(mb));
+        Collections.sort(pieces);
+//        pieces.stream().forEach(x -> System.out.println(x));
+
+        Stack<Result> stack = new Stack<>();
+        walkThroughBoard(mb, pieces, 0, stack);
+
+        stack.sort(Comparator.comparingInt(Result::getId));
+        System.out.println(stack);
 
         System.out.println(System.lineSeparator());
     }
 
-    public static boolean walkThroughBoard(MainBoard mb, List<Piece> pieces, int currentPieceIndex, List<Cell> result) throws InterruptedException {
+    public static boolean walkThroughBoard(MainBoard mb,
+                                           List<Piece> pieces,
+                                           int currentPieceIndex,
+                                           Stack<Result> result) throws InterruptedException {
+
         if (Thread.currentThread().isInterrupted()) throw new InterruptedException();
 
         if (currentPieceIndex == pieces.size()) return mb.isSolved();
 
         Piece p = pieces.get(currentPieceIndex);
         List<Cell> fittingCells = p.getFittingCells();
+
         for (Cell c : fittingCells) {
             mb.overlapPiece(p, c);
-            result.add(c);
+            result.push(new Result(c, p.getId()));
 
             if (walkThroughBoard(mb, pieces, currentPieceIndex+1, result)) {
                 return true;
             }
 
             mb.removePiece(p, c);
-            result.remove(result.size()-1);
+            result.pop();
         }
 
         return false;
