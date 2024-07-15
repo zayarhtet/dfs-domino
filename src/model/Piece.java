@@ -22,8 +22,8 @@ public class Piece extends Board implements Comparable<Piece> {
         final int pieceRows = totalRow;
         final int pieceCols = totalCol;
 
-        IntStream.rangeClosed(0, mainRows - pieceRows).forEach(y -> {
-            IntStream.rangeClosed(0, mainCols - pieceCols).forEach(x -> {
+        IntStream.rangeClosed(0, mainCols - pieceCols).forEach(x -> {
+            IntStream.rangeClosed(0, mainRows - pieceRows).forEach(y -> {
                 fittingCells.add(new Cell(x, y));
             });
         });

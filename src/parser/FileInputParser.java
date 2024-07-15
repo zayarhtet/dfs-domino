@@ -70,7 +70,7 @@ public class FileInputParser implements InputParser {
     public void parseBoard(String[] rows, Board b) {
         IntStream.range(0, b.getTotalRow()).parallel().forEach(i -> {
             String [] cells = rows[i].split("");
-            IntStream.range(0, b.getTotalCol()).parallel().forEach(j -> {
+            IntStream.range(0, cells.length).parallel().forEach(j -> {
                 try {
                     b.setCell(new Cell(i,j), parseInt(cells[j]));
                 } catch (NumberFormatException e) {

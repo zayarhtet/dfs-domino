@@ -59,13 +59,14 @@ public class Solver {
         List<Piece> pieces = ip.getPieces();
 
         pieces.stream().forEach(x -> x.parseTopLeftCorners(mb));
-        Collections.sort(pieces);
+//        Collections.sort(pieces);
+//        System.out.println(pieces.size());
 //        pieces.stream().forEach(x -> System.out.println(x));
 
         Stack<Result> stack = new Stack<>();
         walkThroughBoard(mb, pieces, 0, stack);
 
-        stack.sort(Comparator.comparingInt(Result::getId));
+//        stack.sort(Comparator.comparingInt(Result::getId));
         System.out.println(stack);
 
         System.out.println(System.lineSeparator());
@@ -84,9 +85,13 @@ public class Solver {
         List<Cell> fittingCells = p.getFittingCells();
 
         for (Cell c : fittingCells) {
-            mb.overlapPiece(p, c);
+            boolean isGood = mb.overlapPiece(p, c);
+            if (!isGood) continue;
+//            System.out.println(p);
+//            System.out.println(mb);
             result.push(new Result(c, p.getId()));
 
+            System.out.println(result);
             if (walkThroughBoard(mb, pieces, currentPieceIndex+1, result)) {
                 return true;
             }

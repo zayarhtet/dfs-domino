@@ -6,13 +6,13 @@ import java.net.URISyntaxException;
 import java.util.concurrent.*;
 
 public class Main {
-    public static final int TIMEOUT_SECONDS = 12;
+    public static final int TIMEOUT_SECONDS = 500;
     static ExecutorService executor = Executors.newSingleThreadExecutor();
 
     public static void main (String [] args) {
-        executeAll("resource/levels");
+//        executeAll("resource/levels");
 
-//        executeOne("resource/levels/08.txt");
+        executeOne("resource/levels/09.txt");
     }
 
     public static void executeAll(String classpathFolder) {
