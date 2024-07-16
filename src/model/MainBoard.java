@@ -11,22 +11,7 @@ public class MainBoard extends Board {
         maxDepth = depth;
     }
 
-    public boolean overlapPiece(Piece piece, Cell topLeftCorner) {
-        boolean allZero = true;
-        for (int i = 0; i < piece.totalRow; i++) {
-            final int finalI = i;
-            for (int j = 0; j < piece.totalCol; j++) {
-                int boardRow = topLeftCorner.y + finalI;
-                int boardCol = topLeftCorner.x + j;
-                if (board[boardRow][boardCol] != 0) {
-                    allZero = false;
-                    break;
-                }
-            }
-        }
-
-        if (allZero) return false;
-
+    public void overlapPiece(Piece piece, Cell topLeftCorner) {
         IntStream.range(0, piece.totalRow).forEach(i -> {
             final int finalI = i;
             IntStream.range(0, piece.totalCol).forEach(j -> {
@@ -36,7 +21,6 @@ public class MainBoard extends Board {
                 board[boardRow][boardCol] %= maxDepth;
             });
         });
-        return true;
     }
 
     public void removePiece(Piece piece, Cell topLeftCorner) {

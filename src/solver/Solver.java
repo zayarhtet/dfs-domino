@@ -12,31 +12,19 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.*;
 
-class Result {
-    Cell c;
-    int id;
-
-    public Result(Cell c, int id) {
-        this.c = c;
-        this.id = id;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String toString() {
-        return c.toString();
-    }
-}
-
 public class Solver {
     private List<String> resourcePaths;
     private Iterator<String> levelIterator;
+    private SolveAlgorithm algorithm;
 
-    public Solver(String folderName) throws IOException, URISyntaxException {
+    public Solver(String folderName, SolveAlgorithm algorithm) throws IOException, URISyntaxException {
+        this(algorithm);
         resourcePaths = ResourceLoader.getResourcePaths(folderName);
         levelIterator = resourcePaths.iterator();
+    }
+
+    public Solver(SolveAlgorithm algorithm) {
+        this.algorithm = algorithm;
     }
 
     public boolean hasNextLevel() {
@@ -48,7 +36,7 @@ public class Solver {
         solveOne(path);
     }
 
-    public static void solveOne(String path) throws InterruptedException, FileNotFoundException {
+    public void solveOne(String path) throws InterruptedException, FileNotFoundException {
         System.out.println(path);
 
         InputParser ip = new FileInputParser(path);
@@ -57,49 +45,10 @@ public class Solver {
         System.out.println(mb);
 
         List<Piece> pieces = ip.getPieces();
+//        pieces.stream().forEach(System.out::println);
 
-        pieces.stream().forEach(x -> x.parseTopLeftCorners(mb));
-//        Collections.sort(pieces);
-//        System.out.println(pieces.size());
-//        pieces.stream().forEach(x -> System.out.println(x));
-
-        Stack<Result> stack = new Stack<>();
-        walkThroughBoard(mb, pieces, 0, stack);
-
-//        stack.sort(Comparator.comparingInt(Result::getId));
-        System.out.println(stack);
+        algorithm.solve(mb, pieces);
 
         System.out.println(System.lineSeparator());
-    }
-
-    public static boolean walkThroughBoard(MainBoard mb,
-                                           List<Piece> pieces,
-                                           int currentPieceIndex,
-                                           Stack<Result> result) throws InterruptedException {
-
-        if (Thread.currentThread().isInterrupted()) throw new InterruptedException();
-
-        if (currentPieceIndex == pieces.size()) return mb.isSolved();
-
-        Piece p = pieces.get(currentPieceIndex);
-        List<Cell> fittingCells = p.getFittingCells();
-
-        for (Cell c : fittingCells) {
-            boolean isGood = mb.overlapPiece(p, c);
-            if (!isGood) continue;
-//            System.out.println(p);
-//            System.out.println(mb);
-            result.push(new Result(c, p.getId()));
-
-            System.out.println(result);
-            if (walkThroughBoard(mb, pieces, currentPieceIndex+1, result)) {
-                return true;
-            }
-
-            mb.removePiece(p, c);
-            result.pop();
-        }
-
-        return false;
     }
 }

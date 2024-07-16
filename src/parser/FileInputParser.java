@@ -18,6 +18,8 @@ public class FileInputParser implements InputParser {
     private String boardString;
     private String pieceString;
 
+    private MainBoard mb;
+
     public FileInputParser(String filename) throws FileNotFoundException {
         InputStream is = ResourceLoader.loadResource(filename);
         if (is == null) { throw new FileNotFoundException(filename + " is not found."); }
@@ -50,7 +52,8 @@ public class FileInputParser implements InputParser {
         MainBoard mb = new MainBoard(rowLength, colLength, maxDepth);
         parseBoard(rows, mb);
 
-        return mb;
+        this.mb = mb;
+        return this.mb;
     }
 
     @Override
@@ -62,6 +65,7 @@ public class FileInputParser implements InputParser {
             String [] rows = rawPieces[x].split(",");
             Piece p = new Piece(rows.length, rows[0].length());
             parseBoard(rows, p);
+            p.parseTopLeftCorners(mb);
             pieces.add(p);
         });
         return pieces;
