@@ -62,6 +62,10 @@ All the test files inside that folder will be executed:
 java Main <test-foldername.txt>
 ```
 
+## Test File Timeout
+
+Each test file has a timeout of 20 seconds. The program will be interrupted if the test file is taking beyond 20 seconds.
+
 ## Caution
 
 The built-in test files inside `resource/levels` are loaded with the classpath meanwhile the argumented test file/folder name  are loaded with the file system.
