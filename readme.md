@@ -12,18 +12,6 @@ Given a board, a list of pieces and the maximum depth for the pieces to be overl
 
 - Each piece can be used only once and both board and pieces are not rotatable. All the pieces must be placed on the board.
 
-## Commandline Arguments
-
-The program accepts a command line argument for the test file(s).
-
-If there is no argument, the program will execute all the built-in test files located in `src/resource/levels/`.
-
-- The argument can be a folder or a file name.
-
-- If it is a folder name, all the test file inside it will be executed.
-
-- If it is a file name, only that file will be executed.
-
 ## Test File
 
 The test file must be `.txt` file and should look like this:
@@ -38,10 +26,46 @@ The test file must be `.txt` file and should look like this:
 - Line 2: the initial board state. Each	row	is separated by	a comma. Each digit represents the initial value for the cell.
 - Line 3: individual pieces. Each piece is separated by a space. Each row within a piece is separated by a comma. `.` means no increment and `X` means increment by 1.
 
+## Commandline Arguments
+
+The program accepts a command line argument for the test file(s).
+
+If there is no argument, the program will execute all the built-in test files located in `src/resource/levels/`.
+
+- The argument can be a folder or a file name.
+
+- If it is a folder name, all the test file inside it will be executed.
+
+- If it is a file name, only that file will be executed.
+
 ## Compilation
 
-To compile the program, navigate to the directory containing the `src` folder and run:
+To compile the program, navigate to the `src` directory containing the `Main.java` and run:
 
 ```sh
-javac -classpath "out/" src/Main.java
+javac Main.java
 ```
+
+Execute the Main class file inside that `src` directory:
+
+```shell
+java Main
+```
+
+Passing the specific test file name as an argument:
+```shell
+java Main <test-filename.txt>
+```
+
+All the test files inside that folder will be executed:
+```shell
+java Main <test-foldername.txt>
+```
+
+## Caution
+
+The built-in test files inside `resource/levels` are loaded with the classpath meanwhile the argumented test file/folder name  are loaded with the file system.
+
+If the program is compiled and class files are produced in different place, please relocate the built-in test files according to the `resource/levels` path. 
+
+Otherwise, built-in test file will not be working. (this does not affect the argumented test file path which are loaded with the file system.)
