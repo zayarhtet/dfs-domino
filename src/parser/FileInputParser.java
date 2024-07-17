@@ -20,9 +20,8 @@ public class FileInputParser implements InputParser {
 
     private MainBoard mb;
 
-    public FileInputParser(String filename) throws FileNotFoundException {
-        InputStream is = ResourceLoader.loadResource(filename);
-        if (is == null) { throw new FileNotFoundException(filename + " is not found."); }
+    public FileInputParser(String filename, ResourceLoader resourceLoader) throws FileNotFoundException {
+        InputStream is = resourceLoader.loadResource(filename);
 
         try (Scanner sc = new Scanner(is)) {
             String line = readNextLine(sc);

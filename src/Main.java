@@ -1,6 +1,10 @@
+import resource.ClassPathResourceLoader;
+import resource.FilePathResourceLoader;
+import resource.ResourceLoader;
 import solver.Backtracking;
 import solver.Solver;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -11,14 +15,28 @@ public class Main {
     static ExecutorService executor = Executors.newSingleThreadExecutor();
 
     public static void main (String [] args) {
-        executeAll("resource/levels");
+        if (args.length == 0) {
+            ResourceLoader rl = ClassPathResourceLoader.newInstance();
+            executeAll("resource/levels", rl);
+//            executeOne("resource/levels/04.txt", rl);
+        } else {
+            String path = args[0];
+            File file = new File(path);
 
-//        executeOne("resource/levels/04.txt");
+            if (file.exists()) {
+                ResourceLoader rl = FilePathResourceLoader.newInstance();
+
+                if (file.isDirectory()) executeAll(path, rl);
+                else if (file.isFile()) executeOne(path, rl);
+                else System.out.println("The path is neither a file nor a directory.");
+
+            } else { System.out.println("The path does not exist."); }
+        }
     }
 
-    public static void executeAll(String classpathFolder) {
+    public static void executeAll(String classpathFolder, ResourceLoader rl) {
         try {
-            Solver solver = new Solver(classpathFolder, new Backtracking());
+            Solver solver = new Solver(classpathFolder, new Backtracking(), rl);
             while(solver.hasNextLevel()) {
                 Future<?> future = executor.submit(() -> {
                     try { solver.solve(); }
@@ -43,8 +61,8 @@ public class Main {
         finally { executor.shutdownNow(); }
     }
 
-    public static void executeOne(String classpathFile) {
-        Solver solver = new Solver(new Backtracking());
+    public static void executeOne(String classpathFile, ResourceLoader rl) {
+        Solver solver = new Solver(new Backtracking(), rl);
         Future<?> future = executor.submit(() -> {
             try { solver.solveOne(classpathFile); }
             catch (InterruptedException e) {

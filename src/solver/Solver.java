@@ -1,10 +1,10 @@
 package solver;
 
-import model.Cell;
 import model.MainBoard;
 import model.Piece;
 import parser.FileInputParser;
 import parser.InputParser;
+import resource.ClassPathResourceLoader;
 import resource.ResourceLoader;
 
 import java.io.FileNotFoundException;
@@ -16,15 +16,17 @@ public class Solver {
     private List<String> resourcePaths;
     private Iterator<String> levelIterator;
     private SolveAlgorithm algorithm;
+    private ResourceLoader resourceLoader;
 
-    public Solver(String folderName, SolveAlgorithm algorithm) throws IOException, URISyntaxException {
-        this(algorithm);
-        resourcePaths = ResourceLoader.getResourcePaths(folderName);
+    public Solver(String folderName, SolveAlgorithm algorithm, ResourceLoader resourceLoader) throws IOException, URISyntaxException {
+        this(algorithm, resourceLoader);
+        resourcePaths = this.resourceLoader.getResourcePaths(folderName);
         levelIterator = resourcePaths.iterator();
     }
 
-    public Solver(SolveAlgorithm algorithm) {
+    public Solver(SolveAlgorithm algorithm, ResourceLoader rl) {
         this.algorithm = algorithm;
+        this.resourceLoader = rl;
     }
 
     public boolean hasNextLevel() {
@@ -39,7 +41,7 @@ public class Solver {
     public void solveOne(String path) throws InterruptedException, FileNotFoundException {
         System.out.println(path);
 
-        InputParser ip = new FileInputParser(path);
+        InputParser ip = new FileInputParser(path, resourceLoader);
 
         MainBoard mb = ip.getBoard();
         System.out.println(mb);
